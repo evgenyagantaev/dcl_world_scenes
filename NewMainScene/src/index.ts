@@ -69,34 +69,58 @@ export function main() {
     console.log('WebSocket is closed\n');
   };
 
-  // Система плавного поворота NPC к игроку
-  engine.addSystem((dt: number) => {
-    // Получаем трансформ игрока
-    const playerTransform = Transform.get(engine.PlayerEntity);
-    if (!playerTransform) return;
+  const FOLLOW_DISTANCE = 3
+const FOLLOW_SPEED = 5
+const HEIGHT_OFFSET = 0.1
 
-    // Получаем трансформ NPC
-    const npcTransform = Transform.getMutable(CuratorAvatar);
+engine.addSystem((dt: number) => {
+    const playerTransform = Transform.get(engine.PlayerEntity)
+    const npcTransform = Transform.getMutable(CuratorAvatar)
     
-    // Рассчитываем направление к игроку
-    const direction = Vector3.subtract(playerTransform.position, npcTransform.position);
-    direction.y = 0; // Игнорируем вертикальную ось
+    if (!playerTransform) return
+
+    // 1. Получаем направление взгляда игрока
+    const playerForward = Vector3.rotate(
+        Vector3.Forward(),
+        playerTransform.rotation
+    )
+
+    // 2. Рассчитываем целевую позицию за спиной игрока
+    const targetPosition = Vector3.add(
+        playerTransform.position,
+        Vector3.scale(playerForward, -FOLLOW_DISTANCE)
+    )
+    targetPosition.y += HEIGHT_OFFSET
+
+    // 3. Двигаем NPC к цели
+    const direction = Vector3.subtract(targetPosition, npcTransform.position)
+    const distance = Vector3.length(direction)
+
+    if (distance > 0.1) {
+        Vector3.normalize(direction)
+        npcTransform.position = Vector3.add(
+            npcTransform.position,
+            Vector3.scale(direction, FOLLOW_SPEED * dt)
+        )
+    }
+
+    // 4. Поворот NPC лицом к игроку
+    const lookDirection = Vector3.subtract(
+        playerTransform.position,
+        npcTransform.position
+    )
+    lookDirection.y = 0
     
-    // Создаем целевую позицию немного перед игроком
-    const targetPosition = Vector3.add(playerTransform.position, Vector3.scale(Vector3.normalize(direction), 0.5));
-    
-    // Получаем кватернион поворота с учетом системы координат
-    const targetRotation = Quaternion.fromLookAt(
-      npcTransform.position,
-      targetPosition,
-      Vector3.Up() // Вектор "вверх" мира
-    );
-    
-    // Плавно интерполируем текущий поворот
-    npcTransform.rotation = Quaternion.slerp(
-      npcTransform.rotation,
-      targetRotation,
-      dt * 5 // Скорость поворота
-    );
-  });
+    if (Vector3.lengthSquared(lookDirection) > 0.01) {
+        const targetRotation = Quaternion.fromLookAt(
+            npcTransform.position,
+            Vector3.add(npcTransform.position, lookDirection)
+        )
+        npcTransform.rotation = Quaternion.slerp(
+            npcTransform.rotation,
+            targetRotation,
+            Math.min(dt * 5, 1)
+        )
+    }
+});
 }
