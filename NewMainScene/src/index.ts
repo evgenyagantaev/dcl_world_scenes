@@ -70,8 +70,9 @@ export function main() {
   };
 
   const FOLLOW_DISTANCE = 3
-const FOLLOW_SPEED = 5
+const FOLLOW_SPEED = 4
 const HEIGHT_OFFSET = 0.1
+const STOPPING_DISTANCE = 0.2
 
 engine.addSystem((dt: number) => {
     const playerTransform = Transform.get(engine.PlayerEntity)
@@ -79,48 +80,55 @@ engine.addSystem((dt: number) => {
     
     if (!playerTransform) return
 
-    // 1. Получаем направление взгляда игрока
-    const playerForward = Vector3.rotate(
-        Vector3.Forward(),
-        playerTransform.rotation
-    )
-
-    // 2. Рассчитываем целевую позицию за спиной игрока
-    const targetPosition = Vector3.add(
-        playerTransform.position,
-        Vector3.scale(playerForward, -FOLLOW_DISTANCE)
-    )
-    targetPosition.y += HEIGHT_OFFSET
-
-    // 3. Двигаем NPC к цели
-    const direction = Vector3.subtract(targetPosition, npcTransform.position)
-    const distance = Vector3.length(direction)
-
-    if (distance > 0.1) {
-        Vector3.normalize(direction)
-        npcTransform.position = Vector3.add(
-            npcTransform.position,
-            Vector3.scale(direction, FOLLOW_SPEED * dt)
-        )
-    }
-
-    // 4. Поворот NPC лицом к игроку
-    const lookDirection = Vector3.subtract(
+    // 1. Получаем направление от NPC к игроку
+    const toPlayerDirection = Vector3.subtract(
         playerTransform.position,
         npcTransform.position
     )
-    lookDirection.y = 0
     
-    if (Vector3.lengthSquared(lookDirection) > 0.01) {
-        const targetRotation = Quaternion.fromLookAt(
-            npcTransform.position,
-            Vector3.add(npcTransform.position, lookDirection)
+    // 2. Нормализуем направление и вычисляем целевую позицию
+    const distanceToPlayer = Vector3.length(toPlayerDirection)
+    const normalizedDirection = Vector3.normalize(toPlayerDirection)
+    
+    // Новая целевая позиция - 3 метра от игрока вдоль линии NPC-игрок
+    const targetPosition = Vector3.add(
+        playerTransform.position,
+        Vector3.scale(normalizedDirection, -FOLLOW_DISTANCE)
+    )
+    targetPosition.y = playerTransform.position.y + HEIGHT_OFFSET
+
+    // 3. Вычисляем дистанцию до целевой позиции
+    const toTarget = Vector3.subtract(targetPosition, npcTransform.position)
+    const targetDistance = Vector3.length(toTarget)
+
+    // 4. Движение только если NPC слишком далеко от цели
+    if (targetDistance > STOPPING_DISTANCE) {
+        const movement = Vector3.scale(
+            Vector3.normalize(toTarget),
+            FOLLOW_SPEED * dt
         )
-        npcTransform.rotation = Quaternion.slerp(
-            npcTransform.rotation,
-            targetRotation,
-            Math.min(dt * 5, 1)
+        npcTransform.position = Vector3.add(npcTransform.position, movement)
+    }
+
+    // 5. Поворот NPC лицом к игроку (с небольшой задержкой)
+    if (distanceToPlayer > 0.5) {
+        const lookDirection = Vector3.subtract(
+            playerTransform.position,
+            npcTransform.position
         )
+        lookDirection.y = 0
+        
+        if (Vector3.lengthSquared(lookDirection) > 0.01) {
+            const targetRotation = Quaternion.fromLookAt(
+                npcTransform.position,
+                Vector3.add(npcTransform.position, lookDirection)
+            )
+            npcTransform.rotation = Quaternion.slerp(
+                npcTransform.rotation,
+                targetRotation,
+                Math.min(dt * 5, 1)
+            )
+        }
     }
 });
 }
