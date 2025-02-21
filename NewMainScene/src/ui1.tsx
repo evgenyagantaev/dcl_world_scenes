@@ -27,11 +27,9 @@ const CuratorChat = () => (
   <UiEntity
     uiTransform={{
       width: 700,
-      height: 800,
-      //margin: '16px 0 8px 270px',
-      margin: { top: '70px', left: '1200px' },
+      height: 850,
+      margin: { top: '70px', left: '1160px' },
     }}
-    //uiBackground={{ color: Color4.create(0.5, 0.8, 0.1, 0.6) }}
     uiBackground={{ color: Color4.Clear() }}
   >
     <UiEntity
@@ -42,50 +40,94 @@ const CuratorChat = () => (
         alignItems: 'center',
         justifyContent: 'flex-end'
       }}
-      //uiBackground={{ color: Color4.fromHexString("#70ac76ff") }}
       uiBackground={{ color: Color4.Clear() }}
     >
-      
-      <Label
-        value={ CuratorAnswer }
-        fontSize={18}
-        uiTransform={{ width: '100%', height: '100%' } }
-      />
-      <Label
-        value={`Talk to Curator`}
-        fontSize={18}
-        uiTransform={{ width: '100%', height: 30 } }
-      />
-      
-      <Input
-        uiTransform={{ width: 600, height: 45, margin: 8, alignSelf: 'flex-end' }}
-        fontSize={18}
-        color={Color4.White()}
-        placeholder="Enter your text here"
-        placeholderColor={Color4.fromHexString("#80808080")}
-        onChange={(value) => {
-          UserAsk = value
+      {/* Кнопка Clear */}
+      <Button
+        uiTransform={{ width: 40, height: 30, alignSelf: 'flex-end', margin: { bottom: 8 } }}
+        value="X"
+        variant="primary"
+        fontSize={16}
+        onMouseDown={() => clearOutput()}
+        uiBackground={{
+          color: Color4.create(0.8, 0.2, 0.2, 0.1),
+          textureMode: 'nine-slices',
+          texture: { src: 'white.png' },
+          textureSlices: { top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 }
         }}
-        onSubmit={(value) => {
-          sendMessage(UserAsk)
-          value = UserAsk
-        }}
-        uiBackground={{ color: Color4.fromHexString("#ffffff00") }}
       />
 
-      <Button
-        uiTransform={{ width: 50, height: 30, margin: 8, alignSelf: 'flex-end' }}
-        value='>>>'
-        variant='primary'
-        fontSize={14}
-        onMouseDown={() => {
-          sendMessage(UserAsk)
+      {/* Ответ сервера с прокруткой */}
+      <UiEntity
+        uiTransform={{
+          width: '100%',
+          height: '100%',
+          margin: { bottom: 10 },
+          overflow: 'scroll'
         }}
-        uiBackground={{ color: Color4.fromHexString("#0000ff80") }}
+        uiBackground={{
+          color: Color4.create(0.1, 0.1, 0.1, 0.1),
+          textureMode: 'nine-slices',
+          texture: { src: 'white.png' }, // Нужна белая текстура в проекте
+          textureSlices: { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }
+        }}
+      >
+        <Label
+          value={CuratorAnswer}
+          fontSize={18}
+          color={Color4.White()}
+          uiTransform={{
+            width: '100%',
+            height: '100%',
+            margin: { left: 8, right: 8, top: 8, bottom: 8 }
+          }}
+          textAlign="top-left"
+        />
+      </UiEntity>
+
+      {/* Поле ввода многострочного текста */}
+      <UiEntity
+        uiTransform={{
+          width: '100%',
+          height: 47,
+          margin: { bottom: 10 },
+          flexDirection: 'column'
+        }}
+        uiBackground={{
+          color: Color4.create(0.1, 0.1, 0.1, 0.5),
+          textureMode: 'nine-slices',
+          texture: { src: 'white.png' },
+          textureSlices: { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }
+        }}
+      >
+        <Input
+          uiTransform={{ width: '100%', height: '100%' }}
+          fontSize={18}
+          color={Color4.White()}
+          placeholder="Type your message..."
+          placeholderColor={Color4.Gray()}
+          onChange={(value) => (UserAsk = value)}
+          onSubmit={() => sendMessage(UserAsk)}
+        />
+      </UiEntity>
+
+      {/* Кнопка отправки */}
+      <Button
+        uiTransform={{ width: 60, height: 30, alignSelf: 'flex-end' }}
+        value="Send"
+        variant="primary"
+        fontSize={16}
+        onMouseDown={() => sendMessage(UserAsk)}
+        uiBackground={{
+          color: Color4.create(0.2, 0.2, 0.8, 0.7),
+          textureMode: 'nine-slices',
+          texture: { src: 'white.png' },
+          textureSlices: { top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 }
+        }}
       />
     </UiEntity>
   </UiEntity>
-)
+);
 
 function sendMessage(message: string) {
   if (socket && socket.readyState === WebSocket.OPEN) {
@@ -93,10 +135,7 @@ function sendMessage(message: string) {
   }
 }
 
-function getPlayerPosition() {
-  const playerPosition = Transform.getOrNull(engine.PlayerEntity)
-  if (!playerPosition) return ' no data yet'
-  const { x, y, z } = playerPosition.position
-  return `{X: ${x.toFixed(2)}, Y: ${y.toFixed(2)}, z: ${z.toFixed(2)} }`
+// Функция для очистки поля вывода
+function clearOutput() {
+  CuratorAnswer = ''
 }
-
