@@ -50,31 +50,15 @@ export function main() {
     rotation: Quaternion.fromAngleAxis(-135, Vector3.create(0, 1, 0)),
   })
 
-  // Initialize the WebSocket and connect
-  console.log('initializing WebSocket...\n')
-  const socket = new WebSocket('wss://78.153.149.194:37137');
-  SetSocket(socket)
-  console.log('WebSocket initialized\n')
-
-  socket.onopen = () => {
-    console.log('WebSocket is open\n');
-  };
-
-  socket.onmessage = (event) => 
-  {
-    SetCuratorAnswer(event.data)
-  };
-
-  socket.onclose = () => {
-    console.log('WebSocket is closed\n');
-  };
+  // Initialize the WebSocket using SocketService
+  new SocketService('wss://78.153.149.194:37137');
 
   const FOLLOW_DISTANCE = 3
-const FOLLOW_SPEED = 4
-const HEIGHT_OFFSET = 0.1
-const STOPPING_DISTANCE = 0.2
+  const FOLLOW_SPEED = 4
+  const HEIGHT_OFFSET = 0.1
+  const STOPPING_DISTANCE = 0.2
 
-engine.addSystem((dt: number) => {
+  engine.addSystem((dt: number) => {
     const playerTransform = Transform.get(engine.PlayerEntity)
     const npcTransform = Transform.getMutable(CuratorAvatar)
     
@@ -130,5 +114,5 @@ engine.addSystem((dt: number) => {
             )
         }
     }
-});
+  });
 }
