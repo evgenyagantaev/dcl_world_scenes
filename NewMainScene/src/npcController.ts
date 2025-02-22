@@ -28,14 +28,14 @@ export function createNPC() {
 
   // Initialize NPC transform (position and rotation).
   Transform.create(npcEntity, {
-    position: Vector3.create(8, 0.08, 8),
+    position: Vector3.create(8, 0.0, 8),
     rotation: Quaternion.fromAngleAxis(-135, Vector3.create(0, 1, 0)),
   })
 
   // Movement parameters for the NPC.
   const FOLLOW_DISTANCE = 3
   const FOLLOW_SPEED = 4
-  const HEIGHT_OFFSET = 0.1
+  const HEIGHT_OFFSET = 0.0
   const STOPPING_DISTANCE = 0.2
 
   // Add a system for the NPC follow behavior.

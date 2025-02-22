@@ -111,7 +111,7 @@ const CuratorChat = () => (
         />
       </UiEntity>
 
-      {/* copy buffer */}
+      {/* copy buffer
       <UiEntity
         uiTransform={{
           width: '100%',
@@ -133,7 +133,7 @@ const CuratorChat = () => (
           onChange={(value) => {value = copyBuffer}}
           onSubmit={() => {}}
         />
-      </UiEntity>
+      </UiEntity> */}
 
       {/* text input field */}
       <UiEntity
@@ -172,7 +172,7 @@ const CuratorChat = () => (
         }}
         uiBackground={{ color: Color4.Clear() }}
       >
-        <Button
+        {/* <Button
           uiTransform={{ width: 60, height: 30, margin: { right: 4 } }}
           value="Copy"
           variant="primary"
@@ -189,7 +189,7 @@ const CuratorChat = () => (
               right: 0.4
             }
           }}
-        />
+        /> */}
 
         <Button
           uiTransform={{ width: 30, height: 30, margin: { right: 4 } }}
@@ -302,5 +302,5 @@ function showNextPage() {
 // Insert sample long text on scene load for testing pagination functionality.
 // This text is repeated enough times (~20) so that its length is around 2600 characters,
 // which should yield approximately 6 pages (given MAX_CHARS_PER_PAGE = 500).
-const sampleLongText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n".repeat(30);
-SetCuratorAnswer(sampleLongText);
+// const sampleLongText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n".repeat(30);
+// SetCuratorAnswer(sampleLongText);
