@@ -60,5 +60,8 @@
   "source": {
     "origin": "creator-hub",
     "projectId": "95c959e8-8123-4296-862e-c2a28ff9867c"
+  },
+  "worldConfiguration": {
+    "name": "evgenyagantaev.eth"
   }
 }

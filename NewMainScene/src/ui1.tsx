@@ -6,11 +6,10 @@ import { Color4, Vector3 } from '@dcl/sdk/math'
 import ReactEcs, { Button, Input, Label, ReactEcsRenderer, UiEntity } from '@dcl/sdk/react-ecs'
 import { Cube } from './components'
 
-export function CuratorChatUiEntity() {
-  return CuratorChat
-}
-
-let socket: WebSocket | null = null
+// Global UI state variables
+let CuratorAnswer = ''
+let UserAsk = ''
+let isConnected = false  // Flag to store connection state; initial value: not connected
 
 export function SetCuratorAnswer(answer: string) {
   CuratorAnswer = answer
@@ -20,8 +19,17 @@ export function SetSocket(ws: WebSocket) {
   socket = ws
 }
 
-let CuratorAnswer = ''
-let UserAsk = ''
+// New setter function to update the connection state
+export function SetConnectionState(state: boolean) {
+  isConnected = state
+}
+
+// WebSocket instance placeholder
+let socket: WebSocket | null = null
+
+export function CuratorChatUiEntity() {
+  return CuratorChat
+}
 
 const CuratorChat = () => (
   <UiEntity
@@ -42,7 +50,7 @@ const CuratorChat = () => (
       }}
       uiBackground={{ color: Color4.Clear() }}
     >
-      {/* Кнопка Clear */}
+      {/* Clear button */}
       <Button
         uiTransform={{ width: 40, height: 30, alignSelf: 'flex-end', margin: { bottom: 8 } }}
         value="X"
@@ -57,7 +65,7 @@ const CuratorChat = () => (
         }}
       />
 
-      {/* Ответ сервера с прокруткой */}
+      {/* Server answer display with scroll */}
       <UiEntity
         uiTransform={{
           width: '100%',
@@ -68,7 +76,7 @@ const CuratorChat = () => (
         uiBackground={{
           color: Color4.create(0.1, 0.1, 0.1, 0.1),
           textureMode: 'nine-slices',
-          texture: { src: 'white.png' }, // Нужна белая текстура в проекте
+          texture: { src: 'white.png' },
           textureSlices: { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }
         }}
       >
@@ -85,11 +93,11 @@ const CuratorChat = () => (
         />
       </UiEntity>
 
-      {/* Поле ввода многострочного текста */}
+      {/* Multiline text input field */}
       <UiEntity
         uiTransform={{
           width: '100%',
-          height: 47,
+          height: 49,
           margin: { bottom: 10 },
           flexDirection: 'column'
         }}
@@ -111,7 +119,7 @@ const CuratorChat = () => (
         />
       </UiEntity>
 
-      {/* Кнопка отправки */}
+      {/* Send button: color depends on connection state */}
       <Button
         uiTransform={{ width: 60, height: 30, alignSelf: 'flex-end' }}
         value="Send"
@@ -119,7 +127,10 @@ const CuratorChat = () => (
         fontSize={16}
         onMouseDown={() => sendMessage(UserAsk)}
         uiBackground={{
-          color: Color4.create(0.2, 0.2, 0.8, 0.7),
+          // Blue when connected, gray when not connected
+          color: isConnected
+            ? Color4.create(0.2, 0.2, 0.8, 0.7)
+            : Color4.create(0.5, 0.5, 0.5, 0.7),
           textureMode: 'nine-slices',
           texture: { src: 'white.png' },
           textureSlices: { top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 }
@@ -130,12 +141,19 @@ const CuratorChat = () => (
 );
 
 function sendMessage(message: string) {
+  // Clear the output field
+  clearOutput()
+
+  // Copy the message into the output field
+  CuratorAnswer = message
+
+  // Send the message to the server if the socket is open
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(message)
   }
 }
 
-// Функция для очистки поля вывода
+// Function to clear the output field
 function clearOutput() {
   CuratorAnswer = ''
 }

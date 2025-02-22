@@ -28,7 +28,7 @@ export function createNPC() {
 
   // Initialize NPC transform (position and rotation).
   Transform.create(npcEntity, {
-    position: Vector3.create(4, 0.08, 5),
+    position: Vector3.create(8, 0.08, 8),
     rotation: Quaternion.fromAngleAxis(-135, Vector3.create(0, 1, 0)),
   })
 
