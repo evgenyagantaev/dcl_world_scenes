@@ -35,12 +35,13 @@ export function createNPC() {
   // Movement parameters for the NPC.
   const FOLLOW_DISTANCE = 3
   const FOLLOW_SPEED = 4
-  const HEIGHT_OFFSET = 0.0
+  const HEIGHT_OFFSET = 0.025
   const STOPPING_DISTANCE = 0.2
 
   // Add a system for the NPC follow behavior.
   engine.addSystem((dt: number) => {
-    const playerTransform = Transform.get(engine.PlayerEntity)
+    const playerTransform = Transform.getMutable(engine.PlayerEntity)
+    playerTransform.position.y = 0.0
     const npcTransform = Transform.getMutable(npcEntity)
     
     if (!playerTransform) return
