@@ -27,7 +27,9 @@ export function SetCuratorAnswer(answer: string) {
     curatorAnswerPages.push(page)
   }
   // Display the first page initially
-  CuratorAnswer = curatorAnswerPages.length > 0 ? curatorAnswerPages[0] : ''
+  CuratorAnswer = (curatorAnswerPages.length > 0 ? curatorAnswerPages[0] : '') + '\n' +
+                  (currentPageIndex > 0 ? '<=====|' : '') +
+                  (currentPageIndex < curatorAnswerPages.length - 1 ? '|=====>' : '');
 }
 
 export function SetSocket(ws: WebSocket) {
@@ -255,7 +257,9 @@ function copyAnswerToClipboard() {
 function showPreviousPage() {
   if (currentPageIndex > 0) {
     currentPageIndex--;
-    CuratorAnswer = curatorAnswerPages[currentPageIndex];
+    CuratorAnswer = curatorAnswerPages[currentPageIndex] + '\n' +
+                    (currentPageIndex > 0 ? '<=====|' : '') +
+                    (currentPageIndex < curatorAnswerPages.length - 1 ? '|=====>' : '');
   }
 }
 
@@ -263,7 +267,9 @@ function showPreviousPage() {
 function showNextPage() {
   if (currentPageIndex < curatorAnswerPages.length - 1) {
     currentPageIndex++;
-    CuratorAnswer = curatorAnswerPages[currentPageIndex];
+    CuratorAnswer = curatorAnswerPages[currentPageIndex] + '\n' +
+                    (currentPageIndex > 0 ? '<=====|' : '') +
+                    (currentPageIndex < curatorAnswerPages.length - 1 ? '|=====>' : '');
   }
 }
 
