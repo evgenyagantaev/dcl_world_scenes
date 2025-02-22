@@ -134,23 +134,95 @@ const CuratorChat = () => (
         />
       </UiEntity>
 
-      {/* Send button: color depends on connection state */}
-      <Button
-        uiTransform={{ width: 60, height: 30, alignSelf: 'flex-end' }}
-        value="Send"
-        variant="primary"
-        fontSize={16}
-        onMouseDown={() => sendMessage(UserAsk)}
-        uiBackground={{
-          // Blue when connected, gray when not connected
-          color: isConnected
-            ? Color4.create(0.2, 0.2, 0.8, 0.7)
-            : Color4.create(0.5, 0.5, 0.5, 0.7),
-          textureMode: 'nine-slices',
-          texture: { src: 'white.png' },
-          textureSlices: { top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 }
+      {/* Buttons row: Copy, Previous Page, Next Page, and Send */}
+      <UiEntity
+        uiTransform={{
+          width: '100%',
+          height: 30,
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          margin: { bottom: 10 }
         }}
-      />
+        uiBackground={{ color: Color4.Clear() }}
+      >
+        <Button
+          uiTransform={{ width: 60, height: 30, margin: { right: 4 } }}
+          value="Copy"
+          variant="primary"
+          fontSize={16}
+          onMouseDown={() => copyAnswerToClipboard()}
+          uiBackground={{
+            color: Color4.create(0.5, 0.5, 0.5, 0.7),
+            textureMode: 'nine-slices',
+            texture: { src: 'white.png' },
+            textureSlices: {
+              top: 0.4,
+              bottom: 0.4,
+              left: 0.4,
+              right: 0.4
+            }
+          }}
+        />
+
+        <Button
+          uiTransform={{ width: 30, height: 30, margin: { right: 4 } }}
+          value="<"
+          variant="primary"
+          fontSize={16}
+          onMouseDown={() => showPreviousPage()}
+          uiBackground={{
+            color: Color4.create(0.2, 0.2, 0.8, 0.7),
+            textureMode: 'nine-slices',
+            texture: { src: 'white.png' },
+            textureSlices: {
+              top: 0.4,
+              bottom: 0.4,
+              left: 0.4,
+              right: 0.4
+            }
+          }}
+        />
+
+        <Button
+          uiTransform={{ width: 30, height: 30, margin: { right: 4 } }}
+          value=">"
+          variant="primary"
+          fontSize={16}
+          onMouseDown={() => showNextPage()}
+          uiBackground={{
+            color: Color4.create(0.2, 0.2, 0.8, 0.7),
+            textureMode: 'nine-slices',
+            texture: { src: 'white.png' },
+            textureSlices: {
+              top: 0.4,
+              bottom: 0.4,
+              left: 0.4,
+              right: 0.4
+            }
+          }}
+        />
+
+        <Button
+          uiTransform={{ width: 60, height: 30 }}
+          value="Send"
+          variant="primary"
+          fontSize={16}
+          onMouseDown={() => sendMessage(UserAsk)}
+          uiBackground={{
+            color: isConnected
+              ? Color4.create(0.2, 0.2, 0.8, 0.7)
+              : Color4.create(0.5, 0.5, 0.5, 0.7),
+            textureMode: 'nine-slices',
+            texture: { src: 'white.png' },
+            textureSlices: {
+              top: 0.4,
+              bottom: 0.4,
+              left: 0.4,
+              right: 0.4
+            }
+          }}
+        />
+      </UiEntity>
     </UiEntity>
   </UiEntity>
 );
@@ -171,6 +243,28 @@ function sendMessage(message: string) {
 // Function to clear the output field
 function clearOutput() {
   SetCuratorAnswer('')
+}
+
+// Function to copy the entire answer (all pages) to the clipboard
+function copyAnswerToClipboard() {
+  const fullAnswer = curatorAnswerPages.join('');
+  
+}
+
+// Function to display the previous page of the answer
+function showPreviousPage() {
+  if (currentPageIndex > 0) {
+    currentPageIndex--;
+    CuratorAnswer = curatorAnswerPages[currentPageIndex];
+  }
+}
+
+// Function to display the next page of the answer
+function showNextPage() {
+  if (currentPageIndex < curatorAnswerPages.length - 1) {
+    currentPageIndex++;
+    CuratorAnswer = curatorAnswerPages[currentPageIndex];
+  }
 }
 
 // Insert sample long text on scene load for testing pagination functionality.
