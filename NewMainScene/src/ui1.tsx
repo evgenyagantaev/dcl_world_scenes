@@ -6,13 +6,28 @@ import { Color4, Vector3 } from '@dcl/sdk/math'
 import ReactEcs, { Button, Input, Label, ReactEcsRenderer, UiEntity } from '@dcl/sdk/react-ecs'
 import { Cube } from './components'
 
+// Define the maximum number of characters that fit in the label component
+const MAX_CHARS_PER_PAGE = 1750;  // Adjust this constant as needed
+
 // Global UI state variables
 let CuratorAnswer = ''
 let UserAsk = ''
 let isConnected = false  // Flag to store connection state; initial value: not connected
 
+// Pagination state variables
+let curatorAnswerPages: string[] = []  // List to store the pages of the answer
+let currentPageIndex = 0               // Index of the currently displayed page
+
 export function SetCuratorAnswer(answer: string) {
-  CuratorAnswer = answer
+  // Split the answer string into pages based on the max character limit
+  curatorAnswerPages = []
+  currentPageIndex = 0
+  for (let i = 0; i < answer.length; i += MAX_CHARS_PER_PAGE) {
+    const page = answer.substring(i, i + MAX_CHARS_PER_PAGE)
+    curatorAnswerPages.push(page)
+  }
+  // Display the first page initially
+  CuratorAnswer = curatorAnswerPages.length > 0 ? curatorAnswerPages[0] : ''
 }
 
 export function SetSocket(ws: WebSocket) {
@@ -52,7 +67,7 @@ const CuratorChat = () => (
     >
       {/* Clear button */}
       <Button
-        uiTransform={{ width: 40, height: 30, alignSelf: 'flex-end', margin: { bottom: 8 } }}
+        uiTransform={{ width: 40, height: 30, alignSelf: 'flex-start', margin: { bottom: 8 } }}
         value="X"
         variant="primary"
         fontSize={16}
@@ -145,7 +160,7 @@ function sendMessage(message: string) {
   clearOutput()
 
   // Copy the message into the output field
-  CuratorAnswer = message
+  SetCuratorAnswer(message)
 
   // Send the message to the server if the socket is open
   if (socket && socket.readyState === WebSocket.OPEN) {
@@ -155,5 +170,11 @@ function sendMessage(message: string) {
 
 // Function to clear the output field
 function clearOutput() {
-  CuratorAnswer = ''
+  SetCuratorAnswer('')
 }
+
+// Insert sample long text on scene load for testing pagination functionality.
+// This text is repeated enough times (~20) so that its length is around 2600 characters,
+// which should yield approximately 6 pages (given MAX_CHARS_PER_PAGE = 500).
+const sampleLongText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n".repeat(30);
+SetCuratorAnswer(sampleLongText);
