@@ -17,6 +17,7 @@ let isConnected = false  // Flag to store connection state; initial value: not c
 // Pagination state variables
 let curatorAnswerPages: string[] = []  // List to store the pages of the answer
 let currentPageIndex = 0               // Index of the currently displayed page
+let copyBuffer = ''
 
 export function SetCuratorAnswer(answer: string) {
   // Split the answer string into pages based on the max character limit
@@ -110,7 +111,31 @@ const CuratorChat = () => (
         />
       </UiEntity>
 
-      {/* Multiline text input field */}
+      {/* copy buffer */}
+      <UiEntity
+        uiTransform={{
+          width: '100%',
+          height: 49,
+        }}
+        uiBackground={{
+          color: Color4.create(0.1, 0.1, 0.1, 0.5),
+          textureMode: 'nine-slices',
+          texture: { src: 'white.png' },
+          textureSlices: { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }
+        }}
+      >
+        <Input
+          uiTransform={{ width: '100%', height: '100%' }}
+          fontSize={18}
+          color={Color4.White()}
+          placeholder="Click 'Copy' to get text..."
+          placeholderColor={Color4.Gray()}
+          onChange={(value) => {value = copyBuffer}}
+          onSubmit={() => {}}
+        />
+      </UiEntity>
+
+      {/* text input field */}
       <UiEntity
         uiTransform={{
           width: '100%',
@@ -245,12 +270,13 @@ function sendMessage(message: string) {
 // Function to clear the output field
 function clearOutput() {
   SetCuratorAnswer('')
+  copyBuffer = ''
 }
 
 // Function to copy the entire answer (all pages) to the clipboard
 function copyAnswerToClipboard() {
   const fullAnswer = curatorAnswerPages.join('');
-  
+  copyBuffer = fullAnswer
 }
 
 // Function to display the previous page of the answer
