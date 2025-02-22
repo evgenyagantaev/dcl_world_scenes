@@ -1,4 +1,4 @@
-import { SetSocket, SetCuratorAnswer, SetConnectionState } from '../ui1'
+import { SetSocket, SetCuratorAnswer, SetConnectionState } from '../curator_chat_ui'
 
 export class SocketService {
   private socket: WebSocket;
