@@ -89,10 +89,10 @@ export function createNPC(): Entity {
   })
 
   // Movement parameters for the NPC.
-  const FOLLOW_DISTANCE = 3
+  const MIN_FOLLOW_DISTANCE = 3     // Minimum distance to maintain from player (in meters)
+  const MAX_FOLLOW_DISTANCE = 4     // Distance at which NPC starts following (in meters)
   const FOLLOW_SPEED = 4
   const HEIGHT_OFFSET = 0.025
-  const STOPPING_DISTANCE = 0.2
 
   // Add a system for the NPC follow behavior.
   engine.addSystem((dt: number) => {
@@ -111,15 +111,15 @@ export function createNPC(): Entity {
     // 2. Calculate the distance to the player.
     const distanceToPlayer = Vector3.length(toPlayerDirection)
 
-    // 3. If the player is too far, move towards them.
-    if (distanceToPlayer > FOLLOW_DISTANCE + STOPPING_DISTANCE) {
+    // 3. If the player is too far (> MAX_FOLLOW_DISTANCE), move towards them until reaching MIN_FOLLOW_DISTANCE
+    if (distanceToPlayer > MAX_FOLLOW_DISTANCE) {
       // Normalize the direction vector
       const normalizedDirection = Vector3.normalize(toPlayerDirection)
 
-      // Calculate the target position
+      // Calculate the target position to maintain MIN_FOLLOW_DISTANCE
       const targetPosition = Vector3.subtract(
         playerTransform.position,
-        Vector3.scale(normalizedDirection, FOLLOW_DISTANCE)
+        Vector3.scale(normalizedDirection, MIN_FOLLOW_DISTANCE)
       )
 
       // Move towards the target position
