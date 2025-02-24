@@ -1,5 +1,5 @@
-import { AvatarShape, engine, Transform, PointerEvents, PointerEventType, InputAction, Entity } from '@dcl/sdk/ecs'
-import { Vector3, Quaternion } from '@dcl/sdk/math'
+import { AvatarShape, engine, Transform, PointerEvents, PointerEventType, InputAction, Entity, MeshCollider, MeshRenderer, Material, inputSystem } from '@dcl/sdk/ecs'
+import { Vector3, Quaternion, Color4 } from '@dcl/sdk/math'
 
 let isDialogVisible = false
 
@@ -44,17 +44,48 @@ export function createNPC(): Entity {
     rotation: Quaternion.fromAngleAxis(-135, Vector3.create(0, 1, 0)),
   })
 
-  // Add pointer events to the NPC
-  PointerEvents.create(npcEntity, {
+  // Create a separate collision entity for the NPC
+  const collisionEntity = engine.addEntity()
+  Transform.create(collisionEntity, {
+    parent: npcEntity,
+    position: Vector3.create(0, 1.0, 0), // Position it at the center of the avatar
+    scale: Vector3.create(0.8, 2.0, 0.8) // Scale to roughly match avatar size
+  })
+  
+  // Add a visible mesh for debugging (can be made invisible later)
+  MeshRenderer.setBox(collisionEntity)
+  Material.setPbrMaterial(collisionEntity, {
+    albedoColor: Color4.create(1, 0, 0, 0.3), // Semi-transparent red
+  })
+  
+  // Add collider to the collision entity
+  MeshCollider.setBox(collisionEntity)
+  
+  // Add pointer events to the collision entity
+  PointerEvents.create(collisionEntity, {
     pointerEvents: [
       { 
         eventType: PointerEventType.PET_DOWN, 
         eventInfo: { 
           button: InputAction.IA_POINTER, 
-          hoverText: 'Talk to Curator' 
+          hoverText: '👉 Talk to Curator 👈' 
+        } 
+      },
+      { 
+        eventType: PointerEventType.PET_HOVER_ENTER, 
+        eventInfo: { 
+          button: InputAction.IA_POINTER, 
+          hoverText: '👉 Talk to Curator 👈' 
         } 
       }
     ]
+  })
+
+  // Add system to handle curator clicks on the collision entity
+  engine.addSystem(() => {
+    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, collisionEntity)) {
+      toggleDialogVisibility()
+    }
   })
 
   // Movement parameters for the NPC.

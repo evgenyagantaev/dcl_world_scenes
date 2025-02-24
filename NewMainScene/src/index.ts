@@ -28,13 +28,8 @@ export function main() {
 
   // Setup NPC and its follow behavior.
   const npcEntity = createNPC()
-
-  // Add system to handle curator clicks
-  engine.addSystem(() => {
-    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, npcEntity)) {
-      toggleDialogVisibility()
-    }
-  })
+  
+  // Note: The click handler for the NPC is now handled inside the createNPC function
 
   //************************************* */
   const guestBook = engine.addEntity()
