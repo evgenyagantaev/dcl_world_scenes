@@ -1,10 +1,22 @@
-import { AvatarShape, engine, Transform } from '@dcl/sdk/ecs'
+import { AvatarShape, engine, Transform, PointerEvents, PointerEventType, InputAction, Entity } from '@dcl/sdk/ecs'
 import { Vector3, Quaternion } from '@dcl/sdk/math'
+
+let isDialogVisible = false
+
+export function toggleDialogVisibility() {
+  isDialogVisible = !isDialogVisible
+  return isDialogVisible
+}
+
+export function getDialogVisibility() {
+  return isDialogVisible
+}
 
 /**
  * Creates an NPC avatar with a follow behavior.
+ * @returns The entity ID of the created NPC
  */
-export function createNPC() {
+export function createNPC(): Entity {
   // Create the NPC entity.
   const npcEntity = engine.addEntity()
 
@@ -32,6 +44,19 @@ export function createNPC() {
     rotation: Quaternion.fromAngleAxis(-135, Vector3.create(0, 1, 0)),
   })
 
+  // Add pointer events to the NPC
+  PointerEvents.create(npcEntity, {
+    pointerEvents: [
+      { 
+        eventType: PointerEventType.PET_DOWN, 
+        eventInfo: { 
+          button: InputAction.IA_POINTER, 
+          hoverText: 'Talk to Curator' 
+        } 
+      }
+    ]
+  })
+
   // Movement parameters for the NPC.
   const FOLLOW_DISTANCE = 3
   const FOLLOW_SPEED = 4
@@ -52,49 +77,39 @@ export function createNPC() {
       npcTransform.position
     )
 
-    // 2. Normalize the direction and calculate the target position.
+    // 2. Calculate the distance to the player.
     const distanceToPlayer = Vector3.length(toPlayerDirection)
-    const normalizedDirection = Vector3.normalize(toPlayerDirection)
-    
-    // Calculate the target position: a point 3 meters away from the player.
-    const targetPosition = Vector3.add(
-      playerTransform.position,
-      Vector3.scale(normalizedDirection, -FOLLOW_DISTANCE)
-    )
-    targetPosition.y = playerTransform.position.y + HEIGHT_OFFSET
 
-    // 3. Compute the distance to that target position.
-    const toTarget = Vector3.subtract(targetPosition, npcTransform.position)
-    const targetDistance = Vector3.length(toTarget)
+    // 3. If the player is too far, move towards them.
+    if (distanceToPlayer > FOLLOW_DISTANCE + STOPPING_DISTANCE) {
+      // Normalize the direction vector
+      const normalizedDirection = Vector3.normalize(toPlayerDirection)
 
-    // 4. Move the NPC if it is farther than the stopping distance.
-    if (targetDistance > STOPPING_DISTANCE) {
-      const movement = Vector3.scale(
-        Vector3.normalize(toTarget),
-        FOLLOW_SPEED * dt
-      )
-      npcTransform.position = Vector3.add(npcTransform.position, movement)
-    }
-
-    // 5. Rotate the NPC to face the player (with a slight delay).
-    if (distanceToPlayer > 0.5) {
-      const lookDirection = Vector3.subtract(
+      // Calculate the target position
+      const targetPosition = Vector3.subtract(
         playerTransform.position,
-        npcTransform.position
+        Vector3.scale(normalizedDirection, FOLLOW_DISTANCE)
       )
-      lookDirection.y = 0
 
-      if (Vector3.lengthSquared(lookDirection) > 0.01) {
-        const targetRotation = Quaternion.fromLookAt(
-          npcTransform.position,
-          Vector3.add(npcTransform.position, lookDirection)
-        )
-        npcTransform.rotation = Quaternion.slerp(
-          npcTransform.rotation,
-          targetRotation,
-          Math.min(dt * 5, 1)
-        )
-      }
+      // Move towards the target position
+      const moveDirection = Vector3.normalize(
+        Vector3.subtract(targetPosition, npcTransform.position)
+      )
+      const movement = Vector3.scale(moveDirection, FOLLOW_SPEED * dt)
+
+      npcTransform.position = Vector3.add(npcTransform.position, movement)
+      npcTransform.position.y = HEIGHT_OFFSET
+
+      // Make the NPC face the player
+      const lookAtTarget = Vector3.create(
+        playerTransform.position.x,
+        npcTransform.position.y,
+        playerTransform.position.z
+      )
+      const direction = Vector3.subtract(lookAtTarget, npcTransform.position)
+      npcTransform.rotation = Quaternion.lookRotation(direction)
     }
   })
+
+  return npcEntity
 } 

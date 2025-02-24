@@ -2,11 +2,10 @@
 declare const Camera: { instance: { position: Vector3 } };
 
 import { CuratorChatUiEntity } from './curator_chat_ui'
-
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { SocketService } from './network/socketService'
-import { createNPC } from './npcController'
-import { GuestBookUiEntity } from './guest_book_ui'
+import { createNPC, toggleDialogVisibility } from './npcController'
+import { GuestBookUiEntity, toggleGuestBookVisibility } from './guest_book_ui'
 import { engine, Transform, Material, TextShape, Billboard, MeshRenderer, MeshCollider, InputAction, PointerEventType, PointerEvents, inputSystem } from '@dcl/sdk/ecs'
 import { Cube } from './components'
 import { Color4, Vector3, Quaternion } from '@dcl/sdk/math'
@@ -15,14 +14,27 @@ import { getRandomHexColor } from './utils';
 export function main() {
   console.log('main starting...\n')
 
-  // Set the UI renderer during initialization.
-  ReactEcsRenderer.setUiRenderer(CuratorChatUiEntity())
+  // Set the UI renderers during initialization.
+  const curatorUI = CuratorChatUiEntity()
+  const guestBookUI = GuestBookUiEntity()
+  ReactEcsRenderer.setUiRenderer(() => {
+    const curatorElement = curatorUI()
+    const guestBookElement = guestBookUI()
+    return curatorElement || guestBookElement
+  })
 
   // Initialize the WebSocket.
   new SocketService('wss://78.153.149.194:37137');
 
   // Setup NPC and its follow behavior.
-  createNPC()
+  const npcEntity = createNPC()
+
+  // Add system to handle curator clicks
+  engine.addSystem(() => {
+    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, npcEntity)) {
+      toggleDialogVisibility()
+    }
+  })
 
   //************************************* */
   const guestBook = engine.addEntity()
@@ -38,7 +50,7 @@ export function main() {
     albedoColor: Color4.create(0.96, 0.96, 0.86, 1)
   })
 
-  // Создание текста
+  // Create text
   const guestBookText = engine.addEntity()
   Transform.create(guestBookText, {
     parent: guestBook,
@@ -56,16 +68,12 @@ export function main() {
     ]
   })
 
-  function openGuestBookSystem() 
-  {
-    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, guestBook)) 
-    {
-      console.log('Open Guest Book')
+  // Add system to handle guest book clicks
+  engine.addSystem(() => {
+    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, guestBook)) {
+      toggleGuestBookVisibility()
     }
-  }
-  engine.addSystem(openGuestBookSystem)
-
-  //*************************************
+  })
 
   //************************************* */
   const constructionBoard = engine.addEntity()

@@ -5,6 +5,7 @@ import {
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import ReactEcs, { Button, Input, Label, ReactEcsRenderer, UiEntity } from '@dcl/sdk/react-ecs'
 import { Cube } from './components'
+import { getDialogVisibility } from './npcController'
 
 // Define the maximum number of characters that fit in the label component
 const MAX_CHARS_PER_PAGE = 1750;  // Adjust this constant as needed
@@ -49,7 +50,14 @@ export function CuratorChatUiEntity() {
   return CuratorChat
 }
 
-const CuratorChat = () => (
+const CuratorChat = () => {
+  const isVisible = getDialogVisibility()
+  
+  if (!isVisible) {
+    return null
+  }
+  
+  return (
   <UiEntity
     uiTransform={{
       width: 700,
@@ -252,7 +260,8 @@ const CuratorChat = () => (
       </UiEntity>
     </UiEntity>
   </UiEntity>
-);
+  )
+}
 
 function sendMessage(message: string) {
   // Clear the output field
