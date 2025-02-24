@@ -52,10 +52,10 @@ export function createNPC(): Entity {
     scale: Vector3.create(0.8, 2.0, 0.8) // Scale to roughly match avatar size
   })
   
-  // Add a visible mesh for debugging (can be made invisible later)
+  // Add a mesh but make it completely transparent
   MeshRenderer.setBox(collisionEntity)
   Material.setPbrMaterial(collisionEntity, {
-    albedoColor: Color4.create(1, 0, 0, 0.3), // Semi-transparent red
+    albedoColor: Color4.create(0, 0, 0, 0), // Completely transparent
   })
   
   // Add collider to the collision entity
