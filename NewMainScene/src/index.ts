@@ -7,9 +7,10 @@ import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { SocketService } from './network/socketService'
 import { createNPC } from './npcController'
 import { GuestBookUiEntity } from './guest_book_ui'
-import { engine, Transform, Material, TextShape, Billboard, MeshRenderer, MeshCollider } from '@dcl/sdk/ecs'
+import { engine, Transform, Material, TextShape, Billboard, MeshRenderer, MeshCollider, InputAction, PointerEventType, PointerEvents, inputSystem } from '@dcl/sdk/ecs'
 import { Cube } from './components'
 import { Color4, Vector3, Quaternion } from '@dcl/sdk/math'
+import { getRandomHexColor } from './utils';
 
 export function main() {
   console.log('main starting...\n')
@@ -48,7 +49,22 @@ export function main() {
     fontSize: 1.3,
     textColor: Color4.create(0, 0, 0, 1)
   })
-  //Billboard.create(guestBookText)
+
+  PointerEvents.create(guestBook, {
+    pointerEvents: [
+      { eventType: PointerEventType.PET_DOWN, eventInfo: { button: InputAction.IA_POINTER, hoverText: 'Open Guest Book' } }
+    ]
+  })
+
+  function openGuestBookSystem() 
+  {
+    if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, guestBook)) 
+    {
+      console.log('Open Guest Book')
+    }
+  }
+  engine.addSystem(openGuestBookSystem)
+
   //*************************************
 
   //************************************* */
