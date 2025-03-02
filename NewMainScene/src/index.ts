@@ -5,11 +5,12 @@ import { CuratorChatUiEntity } from './curator_chat_ui'
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { SocketService } from './network/socketService'
 import { createNPC, toggleDialogVisibility } from './npcController'
-import { GuestBookUiEntity, toggleGuestBookVisibility } from './guest_book_ui'
+import { GuestBookUiEntity, toggleGuestBookVisibility, setGuestBookService } from './guest_book_ui'
 import { engine, Transform, Material, TextShape, Billboard, MeshRenderer, MeshCollider, InputAction, PointerEventType, PointerEvents, inputSystem } from '@dcl/sdk/ecs'
 import { Cube } from './components'
 import { Color4, Vector3, Quaternion } from '@dcl/sdk/math'
 import { getRandomHexColor } from './utils';
+import { GuestBookSocketService } from './network/guestBookSocketService'
 
 export function main() {
   console.log('main starting...\n')
@@ -23,8 +24,12 @@ export function main() {
     return curatorElement || guestBookElement
   })
 
-  // Initialize the WebSocket.
+  // Initialize the WebSocket services.
   new SocketService('wss://78.153.149.194:37137');
+  
+  // Initialize the GuestBook WebSocket service
+  const guestBookSocketService = new GuestBookSocketService('wss://78.153.149.194:37135');
+  setGuestBookService(guestBookSocketService);
 
   // Setup NPC and its follow behavior.
   const npcEntity = createNPC()
