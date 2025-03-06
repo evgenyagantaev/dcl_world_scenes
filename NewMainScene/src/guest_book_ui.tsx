@@ -75,7 +75,7 @@ const GuestBook = () => {
       uiTransform={{
         width: 500,
         height: 600,
-        margin: { top: '300px', left: '60px' },
+        margin: { top: '270px', left: '60px' },
       }}
       uiBackground={{ color: Color4.Clear() }}
     >
@@ -160,7 +160,7 @@ const GuestBook = () => {
           <UiEntity
             uiTransform={{
               width: 400,
-              height: '100%'
+              height: 43
             }}
             uiBackground={{
               color: Color4.create(0.1, 0.1, 0.1, 0.5),
@@ -212,8 +212,8 @@ const GuestBook = () => {
         <UiEntity
           uiTransform={{
             width: '100%',
-            height: 49,
-            margin: { bottom: 10 },
+            height: 64,
+            margin: { bottom: 8 },
             flexDirection: 'column'
           }}
           uiBackground={{

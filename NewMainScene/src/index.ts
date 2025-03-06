@@ -29,6 +29,7 @@ export function main() {
   
   // Initialize the GuestBook WebSocket service
   const guestBookSocketService = new GuestBookSocketService('wss://78.153.149.194:37135');
+  //const guestBookSocketService = new GuestBookSocketService('wss://localhost:37135');
   setGuestBookService(guestBookSocketService);
 
   // Setup NPC and its follow behavior.
