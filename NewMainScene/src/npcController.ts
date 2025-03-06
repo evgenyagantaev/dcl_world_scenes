@@ -111,17 +111,19 @@ export function createNPC(): Entity {
     // 2. Calculate the distance to the player.
     const distanceToPlayer = Vector3.length(toPlayerDirection)
 
-    // 3. If the player is too far (> MAX_FOLLOW_DISTANCE), move towards them until reaching MIN_FOLLOW_DISTANCE
-    if (distanceToPlayer > MAX_FOLLOW_DISTANCE) {
-      // Normalize the direction vector
-      const normalizedDirection = Vector3.normalize(toPlayerDirection)
+    // 3. Always calculate the ideal position for the NPC (3 meters from the player)
+    const normalizedDirection = Vector3.normalize(toPlayerDirection)
+    
+    // Calculate the target position to maintain MIN_FOLLOW_DISTANCE
+    const targetPosition = Vector3.subtract(
+      playerTransform.position,
+      Vector3.scale(normalizedDirection, MIN_FOLLOW_DISTANCE)
+    )
 
-      // Calculate the target position to maintain MIN_FOLLOW_DISTANCE
-      const targetPosition = Vector3.subtract(
-        playerTransform.position,
-        Vector3.scale(normalizedDirection, MIN_FOLLOW_DISTANCE)
-      )
-
+    // Move in these cases:
+    // - If player is too far away (> MAX_FOLLOW_DISTANCE)
+    // - If NPC is too close to player (< MIN_FOLLOW_DISTANCE)
+    if (distanceToPlayer > MAX_FOLLOW_DISTANCE || distanceToPlayer < MIN_FOLLOW_DISTANCE) {
       // Move towards the target position
       const moveDirection = Vector3.normalize(
         Vector3.subtract(targetPosition, npcTransform.position)
@@ -130,16 +132,16 @@ export function createNPC(): Entity {
 
       npcTransform.position = Vector3.add(npcTransform.position, movement)
       npcTransform.position.y = HEIGHT_OFFSET
-
-      // Make the NPC face the player
-      const lookAtTarget = Vector3.create(
-        playerTransform.position.x,
-        npcTransform.position.y,
-        playerTransform.position.z
-      )
-      const direction = Vector3.subtract(lookAtTarget, npcTransform.position)
-      npcTransform.rotation = Quaternion.lookRotation(direction)
     }
+    
+    // Always make the NPC face the player, regardless of whether it's moving or not
+    const lookAtTarget = Vector3.create(
+      playerTransform.position.x,
+      npcTransform.position.y,
+      playerTransform.position.z
+    )
+    const direction = Vector3.subtract(lookAtTarget, npcTransform.position)
+    npcTransform.rotation = Quaternion.lookRotation(direction)
   })
 
   return npcEntity
