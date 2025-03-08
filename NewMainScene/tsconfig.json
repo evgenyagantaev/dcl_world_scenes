@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true,
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "__tests__/**/*.ts",
+    "__tests__/**/*.tsx"
   ],
   "extends": "@dcl/sdk/types/tsconfig.ecs7.json"
 }
