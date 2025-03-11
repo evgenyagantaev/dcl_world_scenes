@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/83</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -358,12 +358,7 @@
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
 <a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a>
-<a name='L298'></a><a href='#L298'>298</a>
-<a name='L299'></a><a href='#L299'>299</a>
-<a name='L300'></a><a href='#L300'>300</a>
-<a name='L301'></a><a href='#L301'>301</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L296'></a><a href='#L296'>296</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -408,6 +403,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -427,14 +423,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -576,8 +568,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -667,104 +657,99 @@
 import { Color4 } from<span class="cstat-no" title="statement not covered" > '@dcl/sdk/math'<span class="fstat-no" title="function not covered" ></span></span>
 impo<span class="cstat-no" title="statement not covered" >rt ReactEcs, { Button,<span class="cstat-no" title="statement not covered" > Input, </span></span>Label, UiEntity } from '@dcl/sdk/react-ecs'
 import { GuestB<span class="cstat-no" title="statement not covered" >ookEntry } from './network/guestBookSo</span>cketService'
+impo<span class="cstat-no" title="statement not covered" >rt { toggleVisibility } from './guest_book_logic'</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+// Global UI state variables
+let <span class="cstat-no" title="statement not covered" >isGuestBookVisible = false</span>
+let is<span class="fstat-no" title="function not covered" >Gu</span>estBookConnected = false
+let <span class="cstat-no" title="statement not covered" >guestBookEntries: Gues<span class="cstat-no" title="statement not covered" >tBookEnt</span></span>ry[] = []
+let <span class="cstat-no" title="statement not covered" >userName = 'An</span>onymous'
+let userInput = ''
+let guestBookService: any<span class="cstat-no" title="statement not covered" > = null<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-// Glo<span class="cstat-no" title="statement not covered" >bal UI state variables<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-let isGuestBookVisible = false
-let <span class="cstat-no" title="statement not covered" >isGuestBookConnected = false</span>
-let gu<span class="fstat-no" title="function not covered" >es</span>tBookEntries: GuestBookEntry[] = []
-let <span class="cstat-no" title="statement not covered" >userName = 'Anonymous'<span class="cstat-no" title="statement not covered" ></span></span>
-let <span class="cstat-no" title="statement not covered" >userInput = ''</span>
-let guestBookService: any = null
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-// F<span class="cstat-no" title="statement not covered" >unction to set the WebSocket service instance</span>
-expor<span class="fstat-no" title="function not covered" >t </span>function setGuestBookService(service: any) {
-  gu<span class="cstat-no" title="statement not covered" >estBookService = s</span>ervice
-}
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-// Function to upd<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>e connection state</span>
-export f<span class="cstat-no" title="statement not covered" >unction updateGuestBookConnectionState(c<span class="fstat-no" title="function not covered" >on</span>nected: boolean) {</span>
-  isGuestBookConnecte<span class="cstat-no" title="statement not covered" >d =</span> connected
-}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-// Function to update entries from the server
-export f<span class="cstat-no" title="statement not covered" >unction setGuestBoo</span>kEntries(entries: GuestBookEntry[]) {
-  guestBookEntries = entries
+// Fu<span class="fstat-no" title="function not covered" >nc</span>tion to set the WebSocket service instance
+expo<span class="cstat-no" title="statement not covered" >rt function setGue</span>stBookService(service: any) {
+  guestBookService = service
 }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span>
-export function toggl<span class="cstat-no" title="statement not covered" >eGu</span>estBookVisibility() {
-  isGues<span class="cstat-no" title="statement not covered" >tBookVisible = !i<span class="cstat-no" title="statement not covered" >sGuestBookVis<span class="cstat-no" title="statement not covered" >ible<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span></span></span></span>
-  <span class="cstat-no" title="statement not covered" ></span>
-  // If <span class="cstat-no" title="statement not covered" >becoming visibl</span>e and connected, refresh entries
-  if (isGuestBookVisible &amp;&amp; isGuestBookConnected &amp;&amp; guestBookService) {
-    guestBookService.getEntries()
-<span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >  </span>
-<span class="cstat-no" title="statement not covered" >  return isGuestBookVisible</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+// Funct<span class="cstat-no" title="statement not covered" >ion to update connection state<span class="fstat-no" title="function not covered" ></span></span>
+export function updat<span class="cstat-no" title="statement not covered" >eGu</span>estBookConnectionState(connected: boolean) {
+  isGuestBoo<span class="cstat-no" title="statement not covered" >kConnected = conn<span class="cstat-no" title="statement not covered" >ected<span class="cstat-no" title="statement not covered" ></span></span></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+// Funct<span class="cstat-no" title="statement not covered" >ion to update entri</span>es from the server
+export function setGuestBookEntries(entries: GuestBookEntry[]) {
+  gu<span class="cstat-no" title="statement not covered" >estBook<span class="fstat-no" title="function not covered" >En</span>tries = entries</span>
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
+export f<span class="cstat-no" title="statement not covered" >unction toggleGue<span class="cstat-no" title="statement not covered" >stBookVisibil<span class="cstat-no" title="statement not covered" >ity() {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span></span></span></span>
+  isGues<span class="cstat-no" title="statement not covered" >tBookVisible = toggleVisibility(i</span>sGuestBookVisible, isGuestBookConnected, guestBookService)
+  return<span class="cstat-no" title="statement not covered" > isGuestBookVis</span>ible
+}
+&nbsp;
 <span class="cstat-no" title="statement not covered" >export function getGuestBookVisibility() {</span>
 <span class="cstat-no" title="statement not covered" >  return isGuestBookVisible</span>
 <span class="cstat-no" title="statement not covered" >}</span>
-&nbsp;
-// Function to <span class="cstat-no" title="statement not covered" >format entries for displa</span>y
-function formatEntri<span class="cstat-no" title="statement not covered" >es() {</span>
-  if (guestBookEntries.length === 0) {
-    return "No entries ye<span class="cstat-no" title="statement not covered" >t. Be </span>the first to sign!"
-  }<span class="cstat-no" title="statement not covered" ></span>
-  <span class="cstat-no" title="statement not covered" ></span>
-  return guestB<span class="cstat-no" title="statement not covered" >ookEntries.m</span>ap(entry =&gt; {
-    const date =<span class="cstat-no" title="statement not covered" > ne</span>w Date(entry.timestamp)
-    const formattedDate<span class="cstat-no" title="statement not covered" > = `$</span>{date.toLocaleDateString()} ${date.toLocaleTimeString()}`
-    return `[${formattedDate}] ${entry.name}: ${entry.message}`
-  }).join<span class="fstat-no" title="function not covered" >('\n\n')</span>
-}<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-// Function to add an entry via WebSocket
-export fu<span class="fstat-no" title="function not covered" >nction addGuestBookEntry(messag</span>e: string) {
-  if<span class="cstat-no" title="statement not covered" > (guestBookService &amp;&amp; message.trim</span>()) {
-    guestBookService.addEntry(userName, message.trim())
-  }
-}<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export function GuestBookUiEntity() {
-  return <span class="fstat-no" title="function not covered" >GuestBook</span>
+<span class="cstat-no" title="statement not covered" >// Function to format entries for display</span>
+<span class="cstat-no" title="statement not covered" >function formatEntries() {</span>
+<span class="cstat-no" title="statement not covered" >  if (guestBookEntries.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    return "No entries yet. Be the first to sig</span>n!"
+  }
+  <span class="cstat-no" title="statement not covered" ></span>
+  return guestBookEn<span class="cstat-no" title="statement not covered" >tries.map(entry =&gt; {</span>
+    const date = new Date(e<span class="cstat-no" title="statement not covered" >ntry.timestamp)</span>
+    const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+    return `[${formattedD<span class="cstat-no" title="statement not covered" >ate}] </span>${entry.name}: ${entry.message}`
+  }).join('\n\n')<span class="cstat-no" title="statement not covered" ></span>
 }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-cons<span class="cstat-no" title="statement not covered" >t GuestBook = () =&gt; {</span>
-  if (!i<span class="cstat-no" title="statement not covered" >sGuestBookVisible) {</span>
-    return null
+<span class="cstat-no" title="statement not covered" ></span>
+// Function to a<span class="cstat-no" title="statement not covered" >dd </span>an entry via WebSocket
+export function addGues<span class="cstat-no" title="statement not covered" >tBook</span>Entry(message: string) {
+  if (guestBookService &amp;&amp; message.trim()) {
+    guest<span class="fstat-no" title="function not covered" >BookService.addEntry</span>(userName, message.trim())
   }<span class="cstat-no" title="statement not covered" ></span>
+}
 &nbsp;
-  return <span class="fstat-no" title="function not covered" >(</span>
-<span class="cstat-no" title="statement not covered" >    &lt;UiEntity</span>
-      uiTransform={{
-        width: 500,
-        h<span class="fstat-no" title="function not covered" >eight: 600,</span>
-<span class="cstat-no" title="statement not covered" >        margin: { top: '270px', left: '60px' },</span>
-      }}<span class="cstat-no" title="statement not covered" ></span>
-      uiBackground={{ color: Color4.Clear() }}
-<span class="cstat-no" title="statement not covered" >    &gt;<span class="fstat-no" title="function not covered" ></span></span>
-      &lt;UiEntity<span class="cstat-no" title="statement not covered" ></span>
-        uiTransform={{<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          width: '100%',</span>
-          height: '100%',
-          flexDirection: 'column',
+export fu<span class="fstat-no" title="function not covered" >nction GuestBookUiEntity() {</span>
+  re<span class="cstat-no" title="statement not covered" >turn GuestBook</span>
+}
+&nbsp;
+const Gue<span class="fstat-no" title="function not covered" >stBook = () =&gt; {</span>
+  if<span class="cstat-no" title="statement not covered" > (!isGuestBookVisible) {</span>
+    return null
+  }<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
+    &lt;UiEntity
+      uiT<span class="fstat-no" title="function not covered" >ransform={{</span>
+<span class="cstat-no" title="statement not covered" >        width: 500,</span>
+        height: 600,
+        margin: { top: '270px', left: '60px' },
+      }}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      uiBackground={{ color: Color4.Clear() }}</span>
+    &gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;UiEntity
+<span class="cstat-no" title="statement not covered" >        uiTransform={{<span class="fstat-no" title="function not covered" ></span></span>
+          width: '100<span class="cstat-no" title="statement not covered" >%',</span>
+          height: '100%',<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          flexDirection: 'column',</span>
           alignItems: 'center',
-<span class="fstat-no" title="function not covered" >          justifyContent: '</span>flex-end'
-<span class="cstat-no" title="statement not covered" >        }}</span>
-<span class="cstat-no" title="statement not covered" >        uiBackground={{ color: Color4.Clear() }}</span>
-      &gt;
-        {/* Connection status indicator */}
-        &lt;<span class="fstat-no" title="function not covered" >UiEntity</span>
-<span class="cstat-no" title="statement not covered" >          uiTransform=</span>{{ 
-            width: '100%', 
-            height<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>30,</span>
-<span class="cstat-no" title="statement not covered" >            flexDirection: 'row',</span>
-<span class="cstat-no" title="statement not covered" >            justifyCo</span>ntent: 'space-between',
-            margin: { bottom: 8 }
+          justifyContent: 'flex-end'
+        }}
+        u<span class="fstat-no" title="function not covered" >iBackground={{ col</span>or: Color4.Clear() }}
+<span class="cstat-no" title="statement not covered" >      &gt;</span>
+<span class="cstat-no" title="statement not covered" >        {/* Connection status indicator */}</span>
+        &lt;UiEntity
+          uiTransform={{ 
+<span class="fstat-no" title="function not covered" >            width: '100%', </span>
+<span class="cstat-no" title="statement not covered" >            height: 30</span>,
+            flexDirection: 'row',
+            justif<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >yC</span>ontent: 'space-between',</span>
+<span class="cstat-no" title="statement not covered" >            margin: { bottom: 8 }</span>
 <span class="cstat-no" title="statement not covered" >          }}</span>
         &gt;
-          &lt;Label
+<span class="cstat-no" title="statement not covered" >          &lt;Label</span>
             value={isGuestBookConnected ? "✓ Connected" : "✗ Disconnected"}
             fontSize={14}
             color={isGuestBookConnected ? Color4.Green() : Color4.Red()}
@@ -786,9 +771,9 @@ cons<span class="cstat-no" title="statement not covered" >t GuestBook = () =&gt;
               texture: { src: 'white.png' },
               textureSlices: { top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 }
             }}
-          /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          /&gt;
         &lt;/UiEntity&gt;
-&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         {/* Guest book title */}
         &lt;Label
           value="Guest Book"
@@ -817,9 +802,9 @@ cons<span class="cstat-no" title="statement not covered" >t GuestBook = () =&gt;
             fontSize={16}
             color={Color4.White()}
             uiTransform={{
-              width: 100,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+              width: 100,
               height: '100%'
-            }}
+            }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             textAlign="middle-left"
           /&gt;
           &lt;UiEntity
@@ -845,23 +830,23 @@ cons<span class="cstat-no" title="statement not covered" >t GuestBook = () =&gt;
           &lt;/UiEntity&gt;
         &lt;/UiEntity&gt;
 &nbsp;
-        {/* Guest book content display with scroll */}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        &lt;UiEntity<span class="cstat-no" title="statement not covered" ></span>
-          uiTransform={{<span class="cstat-no" title="statement not covered" ></span>
-            width: '100%',<span class="cstat-no" title="statement not covered" ></span>
-            height: '100%',
-            margin: { bottom: 10 },
+        {/* Guest book content display with scroll */}
+        &lt;UiEntity
+          uiTransform={{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            width: '100%<span class="cstat-no" title="statement not covered" >',</span>
+            height: '100%',<span class="cstat-no" title="statement not covered" ></span>
+            margin: { bottom<span class="cstat-no" title="statement not covered" >: 10 },</span>
             overflow: 'scroll'
           }}
           uiBackground={{
             color: Color4.create(0.1, 0.1, 0.1, 0.5),
             textureMode: 'nine-slices',
             texture: { src: 'white.png' },
-            textureSlices: { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }<span class="fstat-no" title="function not covered" ></span>
-          }}<span class="cstat-no" title="statement not covered" ></span>
-        &gt;<span class="cstat-no" title="statement not covered" ></span>
-          &lt;Label
-            value={formatEntries()}
+            textureSlices: { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }
+          }}
+        &gt;<span class="fstat-no" title="function not covered" ></span>
+          &lt;Label<span class="cstat-no" title="statement not covered" ></span>
+            value={formatEnt<span class="cstat-no" title="statement not covered" >ries()}</span>
             fontSize={16}
             color={Color4.White()}
             uiTransform={{
@@ -872,12 +857,12 @@ cons<span class="cstat-no" title="statement not covered" >t GuestBook = () =&gt;
             textAlign="top-left"
           /&gt;
         &lt;/UiEntity&gt;
-<span class="fstat-no" title="function not covered" ></span>
-        {/* Message inpu<span class="cstat-no" title="statement not covered" >t field */}</span>
-        &lt;UiEntity<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+        {/* Message input field */}
+        &lt;UiEntity<span class="fstat-no" title="function not covered" ></span>
           uiTransform={{<span class="cstat-no" title="statement not covered" ></span>
-            width: '100%',
-            height: 64,
+            width: '100%',<span class="cstat-no" title="statement not covered" ></span>
+            height: 64,<span class="cstat-no" title="statement not covered" ></span>
             margin: { bottom: 8 },
             flexDirection: 'column'
           }}
@@ -970,7 +955,7 @@ cons<span class="cstat-no" title="statement not covered" >t GuestBook = () =&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-08T18:59:30.767Z
+                at 2025-03-11T18:10:52.817Z
             </div>
         <script src="../prettify.js"></script>
         <script>

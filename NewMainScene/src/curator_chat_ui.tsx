@@ -6,6 +6,7 @@ import { Color4, Vector3 } from '@dcl/sdk/math'
 import ReactEcs, { Button, Input, Label, ReactEcsRenderer, UiEntity } from '@dcl/sdk/react-ecs'
 import { Cube } from './components'
 import { getDialogVisibility } from './npcController'
+import { splitAnswer } from './curator_chat_logic'
 
 // Define the maximum number of characters that fit in the label component
 const MAX_CHARS_PER_PAGE = 1750;  // Adjust this constant as needed
@@ -21,17 +22,10 @@ let currentPageIndex = 0               // Index of the currently displayed page
 let copyBuffer = ''
 
 export function SetCuratorAnswer(answer: string) {
-  // Split the answer string into pages based on the max character limit
-  curatorAnswerPages = []
-  currentPageIndex = 0
-  for (let i = 0; i < answer.length; i += MAX_CHARS_PER_PAGE) {
-    const page = answer.substring(i, i + MAX_CHARS_PER_PAGE)
-    curatorAnswerPages.push(page)
-  }
-  // Display the first page initially
-  CuratorAnswer = (curatorAnswerPages.length > 0 ? curatorAnswerPages[0] : '') + '\n' +
-                  (currentPageIndex > 0 ? '<=====|' : '') +
-                  (currentPageIndex < curatorAnswerPages.length - 1 ? '|=====>' : '');
+  const { pages, displayText } = splitAnswer(answer, 0);
+  curatorAnswerPages = pages;
+  currentPageIndex = 0;
+  CuratorAnswer = displayText;
 }
 
 export function SetSocket(ws: WebSocket) {

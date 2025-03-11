@@ -30,16 +30,20 @@
 
 ## Implementation Plan
 
+- [x] Run all unit tests initially and record the results (initial test run; not all tests are required to pass).
+
 ### Part 1: Writing/Modifying Unit Tests
-
-
+- [x] Set up a proper React testing environment using tools like React Testing Library or Enzyme for the UI components.
+- [x] Write unit tests for React components (curator_chat_ui.tsx and guest_book_ui.tsx), including rendering, interaction, and snapshot tests.
+- [x] Write unit tests for engine systems (npcController.ts and timerUtils.ts) using mocks or stubs for external dependencies.
+- [x] Write tests to verify proper dependency injection and separation of business logic from UI/engine-specific code.
 
 ### Part 2: Implementing Code Changes
-
-
+- [x] Refactor the code to implement dependency injection where applicable.
+- [x] Separate business logic from UI and engine-specific code to improve testability.
+- [x] Modify or add new code ensuring full compatibility with the existing and new unit tests.
 
 ### Part 3: Final Testing
-
-
+- [x] Run all unit tests again and verify that all tests pass (this is the final test run).
 
 

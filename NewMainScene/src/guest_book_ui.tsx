@@ -2,6 +2,7 @@
 import { Color4 } from '@dcl/sdk/math'
 import ReactEcs, { Button, Input, Label, UiEntity } from '@dcl/sdk/react-ecs'
 import { GuestBookEntry } from './network/guestBookSocketService'
+import { toggleVisibility } from './guest_book_logic'
 
 // Global UI state variables
 let isGuestBookVisible = false
@@ -27,13 +28,7 @@ export function setGuestBookEntries(entries: GuestBookEntry[]) {
 }
 
 export function toggleGuestBookVisibility() {
-  isGuestBookVisible = !isGuestBookVisible
-  
-  // If becoming visible and connected, refresh entries
-  if (isGuestBookVisible && isGuestBookConnected && guestBookService) {
-    guestBookService.getEntries()
-  }
-  
+  isGuestBookVisible = toggleVisibility(isGuestBookVisible, isGuestBookConnected, guestBookService)
   return isGuestBookVisible
 }
 
