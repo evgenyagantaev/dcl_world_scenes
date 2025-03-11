@@ -27,14 +27,19 @@
 
 ## Implementation Plan
 
+- [ ] Run all initial unit tests and record results (not all tests may pass).
 
 ### Part 1: Writing/Modifying Unit Tests
-
+- [ ] Write tests to verify the creation of a 3D object in the scene.
+- [ ] Write tests to verify that the object's surface displays correct current month information calculated dynamically.
 
 ### Part 2: Implementing Code Changes
-
+- [ ] Analyze the algorithm in src/calendar_interactive_en.html for computing the current date.
+- [ ] Implement a 3D object in the scene space with its surface displaying the current month, using the dynamic algorithm.
+- [ ] Integrate the new functionality with the existing calendar app.
 
 ### Part 3: Final Testing
+- [ ] Run all unit tests again to verify all tests pass.
 
 
 
